@@ -15,6 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 
 @Composable
 fun AddCustomerScreen(modifier: Modifier = Modifier, customerDao: CustomerDao) {
@@ -64,7 +65,7 @@ fun AddCustomerScreen(modifier: Modifier = Modifier, customerDao: CustomerDao) {
         Button(
             onClick = {
                 if (name.isNotBlank() && phone.isNotBlank() && address.isNotBlank()) {
-                    CoroutineScope(Dispatchers.IO).launch {
+                    lifecycleScope.launch(Dispatchers.IO) {  // ✅ Runs in background
                         customerDao.insertCustomer(
                             CustomerEntity(
                                 name = name.trim(),
@@ -72,16 +73,15 @@ fun AddCustomerScreen(modifier: Modifier = Modifier, customerDao: CustomerDao) {
                                 address = address.trim()
                             )
                         )
-                        CoroutineScope(Dispatchers.Main).launch {
-                            refreshTrigger++
+                        withContext(Dispatchers.Main) {  // ✅ Returns to UI thread
                             name = ""
                             phone = ""
                             address = ""
-                            Toast.makeText(context, "Customer Added", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Customer saved!", Toast.LENGTH_SHORT).show()
                         }
                     }
                 } else {
-                    Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Fill all fields!", Toast.LENGTH_SHORT).show()
                 }
             },
             modifier = Modifier.fillMaxWidth()
