@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">InvoiceCH</string>
+    <string name="title_activity_add_item">AddItemActivity</string>
+    <string name="add_new_item">Add New Item</string>
+    <string name="item_name">Item Name</string>
+    <string name="box_price">Box Price</string>
+    <string name="pieces_per_box">Pieces per Box</string>
+    <string name="stock_quantity">Stock Quantity</string>
+    <string name="save_item">Save Item</string>
+
+
+
+</resources>
